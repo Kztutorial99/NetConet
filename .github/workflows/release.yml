@@ -1,0 +1,63 @@
+name: Release APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      - name: Grant gradlew permission
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          mv app/build/outputs/apk/debug/app-debug.apk \
+             app/build/outputs/apk/debug/NetSpeedPro-${VERSION}.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "NetSpeed Pro ${{ github.ref_name }}"
+          body: |
+            ## NetSpeed Pro ${{ github.ref_name }}
+
+            ### Download
+            Download APK di bawah dan install langsung di Android kamu.
+
+            ### Fitur
+            - Test kecepatan Download, Upload & Ping
+            - Info SIM operator dan tipe jaringan (5G/4G/3G/2G/WiFi)
+            - IP Address
+            - Riwayat test tersimpan lokal
+
+            > **Catatan:** Aktifkan "Install dari sumber tidak dikenal" di pengaturan Android.
+          files: app/build/outputs/apk/debug/NetSpeedPro-*.apk
+          generate_release_notes: false
