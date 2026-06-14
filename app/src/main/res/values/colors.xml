@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#070B14</color>
+    <color name="card">#0D1525</color>
+    <color name="cardBorder">#162035</color>
+    <color name="foreground">#DCF0FF</color>
+    <color name="mutedForeground">#4E6A8E</color>
+    <color name="primary">#00D4FF</color>
+    <color name="download">#00F590</color>
+    <color name="upload">#FF6B35</color>
+    <color name="ping">#FFD700</color>
+    <color name="error">#FF4D4D</color>
+    <color name="tabBar">#080C18</color>
+    <color name="tabBarBorder">#111B2F</color>
+    <color name="white">#FFFFFF</color>
+</resources>
